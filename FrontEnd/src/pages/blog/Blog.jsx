@@ -1,11 +1,10 @@
-
-
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import Avatar from "../../assets/avatar.png";
+import "./Blog.css";
 
 export const Blog = () => {
   const navigate = useNavigate();
@@ -37,15 +36,28 @@ export const Blog = () => {
   };
   return (
     <>
-      <div className="home_page h-screen pt-[100px]">
-        <h4>
-          {" "}
-          Welcome <span>{username}</span>
-        </h4>
-        <button onClick={Logout}>LOGOUT</button>
+      <div className="home_page">
+        <div className="profile__card">
+          <div className="logout_">
+            <button onClick={Logout}>
+              <i className="fa-solid fa-right-from-bracket" />
+            </button>
+          </div>
+          <div className="img_">
+            <img src={Avatar} alt="" />
+          </div>
+          <div className="info_">
+            <h1>{username}</h1>
+            <h4>example@gmail.com</h4>
+          </div>
+          <button className="Button_">MY Blogs</button>
+          <div className="card__box">
+            <h2>if u want read more of my blog </h2>
+            <i className="fa-solid fa-arrow-down" />
+          </div>
+        </div>
       </div>
       <ToastContainer />
     </>
   );
 };
-
