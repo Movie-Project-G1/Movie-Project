@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import Avatar from "../../assets/avatar.png";
+import "./Blog.css";
 
 export const Blog = () => {
   const navigate = useNavigate();
@@ -34,22 +36,6 @@ export const Blog = () => {
   };
   return (
     <>
-      {/* <div className="home_page  pt-[100px]">
-        <h4>
-          {" "}
-          Welcome <span>{username}</span>
-        </h4>
-        <button onClick={Logout}>LOGOUT</button>
-      </div> */}
-      <ToastContainer />
-
-      {/* ----------------------------------------------------------- */}
-
-      {/* 
-Install the "flowbite-typography" NPM package to apply styles and format the article content: 
-
-URL: https://flowbite.com/docs/components/typography/ 
-*/}
       <main className="pt-20 pb-16 lg:pt-16 lg:pb-24 bg-[#072958] dark:bg-gray-900 ">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl text-white">
           <article className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">

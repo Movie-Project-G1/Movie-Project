@@ -1,0 +1,85 @@
+.home_page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../../assets/Background-Narrow.jpg);
+    background-size: cover;
+}
+
+.profile__card {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 30rem;
+    width: 25rem;
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 35px;
+}
+
+.profile__card .logout_ {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.img_ img {
+    width: 150px;
+    padding: 8px;
+    background-color: #000;
+    border-radius: 50%;
+}
+
+.img_ {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.info_ {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.info_ h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+
+}
+
+.card__box {
+    background-color: rgb(80, 10, 10);
+    color: white;
+    padding: 36px 0;
+    border-radius: 19px;
+    margin-right: -37px;
+    margin-left: -37px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50px;
+
+}
+
+.card__box i {
+    margin-top: 15px;
+}
+
+.profile__card .Button_ {
+    background-color: white;
+    border: none;
+    outline: none;
+    box-shadow: 0 5px 10px rgba(244, 67, 54, 0.5);
+    padding: 15px 60px;
+    cursor: pointer;
+    border-radius: 30px;
+    margin-bottom: -74px;
+    z-index: 1000;
+    font-weight: 600;
+    font-size: 16px;
+}

@@ -17,6 +17,10 @@ import { Login } from "./pages/Login";
 import { Blog } from "./pages/blog/Blog";
 import { BlogsList } from "./pages/blogs/blogsList";
 
+import AboutUs from "./pages/aboutUS/AboutUs";
+import ContactUs from "./pages/contactUs/ContactUs";
+import Profile from "./pages/profile/Profile";
+
 function App() {
   const dispatch = useDispatch();
   const { url } = useSelector((state) => state.home);
@@ -70,8 +74,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blogs" element={<BlogsList />} />
+
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<PageNotFound />} />
+        <Route path="about" element={<AboutUs />} />
+        <Route path="contact" element={<ContactUs />} />
+        <Route path="profile" element={<Profile />} />
       </Routes>
       <Footer />
     </BrowserRouter>
