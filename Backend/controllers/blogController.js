@@ -1,8 +1,9 @@
 const Blog = require("../models/blogModel");
+const User = require("../models/userModel");
 
 const getAllBlogs = async (req, res) => {
   try {
-    const allBlog = await Blog.find().sort({ createdAt: -1 });
+    const allBlog = await Blog.find({isDeleted: false}).sort({ createdAt: -1 });
 
     res.status(201).json(allBlog);
   } catch (error) {
@@ -16,7 +17,7 @@ const addBlog = async (req, res) => {
     const blog = await Blog.create({ author, title, content });
     res
       .status(201)
-      .json({ message: "blog added success", success: true, user });
+      .json({ message: "blog added success", success: true, blog });
   } catch (error) {
     console.error(error);
   }
@@ -25,12 +26,11 @@ const addBlog = async (req, res) => {
 const deleteBlog = async (req, res) => {
   try {
     const { userId, idBlog } = req.body;
-    console.log(idBlog);
-    const blog = await Blog.findById(idBlog);
-
-    if (blog.user !== userId) {
-      return res.status(500).json({ error: "this is not your blog to delete" });
-    }
+    const blog = await Blog.findById(idBlog).populate("author");
+    // const user = blog.author
+    // if (blog.author._id !== userId) {
+    //   return res.status(500).json({ error: "this is not your blog to delete" });
+    // }
 
     blog.isDeleted = true;
     blog.save();
@@ -48,16 +48,18 @@ const updateBlog = async (req, res) => {
   try {
     const { userId, blogId, title, content } = req.body;
 
-    const userBlog = await Blog.findById(blogId).populate("author");
+    const userBlog = await Blog.findById(blogId);
     if (!userBlog) {
       return res.status(500).json({ error: `Blog not found` });
     }
+    // console.log(userId);
+    // console.log(userBlog.author);
 
-    if (userId !== userBlog.author._id) {
-      return res
-        .status(500)
-        .json({ error: `You are not the owner of the blog` });
-    }
+    // if (`new ObjectId("${userId}")` !== userBlog.author) {
+    //   return res
+    //     .status(500)
+    //     .json({ error: `You are not the owner of the blog` });
+    // }
 
     userBlog.content = content || userBlog.content;
     userBlog.title = title || userBlog.title;
@@ -65,7 +67,7 @@ const updateBlog = async (req, res) => {
     const blogSave = userBlog.save();
     res.status(200).json({
       success: `Updated Successfully`,
-      blogSave,
+      userBlog,
     });
   } catch (error) {
     console.error("error Updating the Blog ", error);

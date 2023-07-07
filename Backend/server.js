@@ -3,7 +3,8 @@ const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-
+const commentRouter = require('./routes/commentRouter')
+const blogRouter = require('./routes/blogRouter')
 
 // import routes
 const authRoute = require('./routes/userRouter');
@@ -21,7 +22,8 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 app.use(express.json());
-
+app.use(blogRouter)
+app.use(commentRouter)
 
 // use routes
 app.use(authRoute);
