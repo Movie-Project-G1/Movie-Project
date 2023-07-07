@@ -15,6 +15,8 @@ import PageNotFound from "./pages/404/PageNotFound";
 import { SignUp } from "./pages/SignUp";
 import { Login } from "./pages/Login";
 import { Blog } from "./pages/blog/Blog";
+import { BlogsList } from "./pages/blogs/blogsList";
+
 import AboutUs from "./pages/aboutUS/AboutUs";
 import ContactUs from "./pages/contactUs/ContactUs";
 import Profile from "./pages/profile/Profile";
@@ -71,6 +73,8 @@ function App() {
         <Route path="/explore/:mediaType" element={<Explore />} />
         <Route path="/login" element={<Login />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blogs" element={<BlogsList />} />
+
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<PageNotFound />} />
         <Route path="about" element={<AboutUs />} />
