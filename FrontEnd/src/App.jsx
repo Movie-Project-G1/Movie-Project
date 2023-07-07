@@ -17,6 +17,7 @@ import { Login } from "./pages/Login";
 import { Blog } from "./pages/blog/Blog";
 import AboutUs from "./pages/aboutUS/AboutUs";
 import ContactUs from "./pages/contactUs/ContactUs";
+import Profile from "./pages/profile/Profile";
 
 function App() {
   const dispatch = useDispatch();
@@ -74,6 +75,7 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
         <Route path="about" element={<AboutUs />} />
         <Route path="contact" element={<ContactUs />} />
+        <Route path="profile" element={<Profile />} />
       </Routes>
       <Footer />
     </BrowserRouter>

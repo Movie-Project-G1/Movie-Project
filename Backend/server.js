@@ -13,12 +13,12 @@ const authRoute = require('./routes/userRouter');
 
 
 // middlewear
-app.use( cors({
-  origin: ["http://localhost:5173"],
-  methods: ["GET", "POST", "PUT", "DELETE" , "PATCH"],
+app.use(cors({
+  origin: ["http://localhost:5174"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 }));
-app.use(express.urlencoded({ extended:true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 app.use(express.json());
 
