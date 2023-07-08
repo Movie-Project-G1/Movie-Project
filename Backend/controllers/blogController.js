@@ -3,9 +3,26 @@ const User = require("../models/userModel");
 
 const getAllBlogs = async (req, res) => {
   try {
-    const allBlog = await Blog.find({isDeleted: false}).sort({ createdAt: -1 });
+    const allBlog = await Blog.find({ isDeleted: false }).sort({
+      createdAt: -1,
+    });
 
-    res.status(201).json(allBlog);
+    res.status(200).json(allBlog);
+  } catch (error) {
+    console.error("err getting the all blog", error);
+  }
+};
+
+const getBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const blog = await Blog.findById(id).populate("author");
+    console.log(blog);
+    if (!blog) {
+      return res.status(500).json({ error: "there is no blog with this id" });
+    }
+
+    res.status(201).json(blog);
   } catch (error) {
     console.error("err getting the all blog", error);
   }
@@ -75,4 +92,4 @@ const updateBlog = async (req, res) => {
   }
 };
 
-module.exports = { getAllBlogs, deleteBlog, addBlog, updateBlog };
+module.exports = { getAllBlogs, deleteBlog, addBlog, updateBlog, getBlog };

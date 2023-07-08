@@ -7,5 +7,7 @@ router.put("/deleteBlog", blogController.deleteBlog);
 router.put("/updateblog", blogController.updateBlog);
 router.post("/addblog", blogController.addBlog);
 
+router.get("/getBlog/:id", blogController.getBlog);
+
 module.exports = router;
 // addBlog, updateBlog

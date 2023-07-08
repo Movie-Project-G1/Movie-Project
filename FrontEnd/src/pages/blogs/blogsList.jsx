@@ -10,7 +10,6 @@ export const BlogsList = () => {
       .get("http://localhost:8800/getAllBlogs")
       .then((response) => {
         setBlogs(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -33,7 +32,10 @@ export const BlogsList = () => {
           <div className="grid gap-8 lg:grid-cols-2">
             {blogs &&
               blogs.map((data) => (
-                <article className="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+                <article
+                  key={data._id}
+                  className="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+                >
                   <div className="flex justify-between items-center mb-5 text-gray-500">
                     <span className="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
                       <svg
@@ -49,7 +51,7 @@ export const BlogsList = () => {
                     <span className="text-sm">14 days ago{data.createdAt}</span>
                   </div>
                   <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <Link to="">{data.title}</Link>
+                    <Link to={`/blogDetails/${data._id}`}>{data.title}</Link>
                   </h2>
                   <p className="mb-5 font-light text-gray-500 dark:text-gray-400">
                     {data.content}
@@ -65,8 +67,8 @@ export const BlogsList = () => {
                         Jese Leos
                       </span>
                     </div>
-                    <a
-                      href="#"
+                    <Link
+                      to={`/blogDetails/${data._id}`}
                       className="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
                     >
                       Read more
@@ -82,7 +84,7 @@ export const BlogsList = () => {
                           clipRule="evenodd"
                         />
                       </svg>
-                    </a>
+                    </Link>
                   </div>
                 </article>
               ))}
