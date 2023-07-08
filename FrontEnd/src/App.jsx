@@ -72,7 +72,7 @@ function App() {
         <Route path="/search/:query" element={<SearchResult />} />
         <Route path="/explore/:mediaType" element={<Explore />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/blog" element={<Blog />} />
+        <Route path="/blogDetails/:id" element={<Blog />} />
         <Route path="/blogs" element={<BlogsList />} />
 
         <Route path="/signup" element={<SignUp />} />
