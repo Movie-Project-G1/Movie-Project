@@ -1,5 +1,5 @@
-const Comment = require("../models/commentModel");
-const User = require("../models/userModel");
+const Comment = require('../models/commentModel');
+const User = require('../models/userModel');
 
 const deleteComment = async (req, res) => {
   try {
@@ -10,7 +10,7 @@ const deleteComment = async (req, res) => {
     if (comment.user !== userId) {
       return res
         .status(500)
-        .json({ error: "this is not your comment to delete" });
+        .json({ error: 'this is not your comment to delete' });
     }
 
     comment.isDeleted = true;
@@ -20,21 +20,33 @@ const deleteComment = async (req, res) => {
       success: `comment is deleted successfully`,
     });
   } catch (error) {
-    console.error("error in delete the comment", error);
+    console.error('error in delete the comment', error);
     res.status(500).json({ error: error.message });
   }
 };
 
 const addComment = async (req, res) => {
   try {
-    const { text, blogId, userId } = req.body;
-    const comment = await Comment.create({ userId, text, blogId });
+    const { user, blog, text } = req.body;
+    const comment = await Comment.create({ user, blog, text });
     res
       .status(201)
-      .json({ message: "comment added success", success: true, user });
+      .json({ message: 'comment added success', success: true, user });
   } catch (error) {
-    console.error(error, "err adding new comment");
+    console.error(error, 'err adding new comment');
   }
 };
 
-module.exports = { deleteComment, addComment };
+const getComments =async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("this is the id :" ,id);
+    const comments = await Comment.find({blog:id}).populate("user").lean()
+    res.status(200).json(comments);
+  } catch (error) {
+    res.status(500).json({ error: "error in get blog comments " });
+    console.error(error);
+  }
+};
+
+module.exports = { deleteComment, addComment,getComments };
