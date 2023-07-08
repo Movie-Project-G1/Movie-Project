@@ -5,7 +5,7 @@ const getAllBlogs = async (req, res) => {
   try {
     const allBlog = await Blog.find({ isDeleted: false }).sort({
       createdAt: -1,
-    });
+    }).populate("author").lean()
 
     res.status(200).json(allBlog);
   } catch (error) {
