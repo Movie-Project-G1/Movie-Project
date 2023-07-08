@@ -56,21 +56,24 @@ module.exports.Login = async (req, res, next) => {
 
 module.exports.updateUser = async (req, res) => {
   try {
-    const { name } = req.body;
-    const userID = req.params.id;
+    const {id} = req.params
+    const username = req.body.name;
+    const imagePath = req.file.path;
+    const user = await User.findById(id)
 
-    const update = await User.findOneAndUpdate(
-      { _id: userID },
-      {
-        username: name,
-      }
-    );
-
-    res.status(201).json("user updated successfully ");
+    if (!user) {
+      console.log("User not found");
+      return;
+    }
+    user.imageUrl = imagePath || user.imageUrl
+    user.username = username || user.username
+    const updatedUser = await user.save();
+    res.json(updatedUser);
   } catch (error) {
-    res.status(500).json({ error: "Failed to update quote" });
+    console.error("Error editing user:", error);
   }
-};
+},
+
 
 module.exports.getAllUsers = async (req, res) => {
   try {
