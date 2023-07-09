@@ -9,7 +9,12 @@ import "./Blog.css";
 export const Blog = () => {
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies([]);
+  const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
+  const [refresh, setRefresh] = useState(true);
+  console.log(userId);
+  console.log(username);
   useEffect(() => {
     const verifyCookie = async () => {
       if (!cookies.token) {
@@ -20,8 +25,10 @@ export const Blog = () => {
         {},
         { withCredentials: true }
       );
-      const { status, user } = data;
+      console.log(data);
+      const { status, user, id } = data;
       setUsername(user);
+      setUserId(id);
       return status
         ? toast(`Hello ${user}`, {
             position: "top-right",
@@ -34,11 +41,30 @@ export const Blog = () => {
     removeCookie("token");
     navigate("/signup");
   };
-
+  console.log(username);
+  //! ----------------------------------add comment------------------------------------------------
   const [commentText, setCommentText] = useState();
-  const handleSubmit = () => {
-    axios.post("http://localhost:8800/addComment");
+
+  const handleSubmitAddComment = (e) => {
+    e.preventDefault();
+    const commentData = {
+      user: userId,
+      blog: blogDetails._id,
+      text: commentText,
+    };
+    axios
+      .post("http://localhost:8800/addComment", commentData)
+      .then((response) => {
+        console.log("comment added successfully");
+        console.log(response.data);
+        setRefresh(!refresh);
+      })
+      .catch((error) => {
+        console.error(error, "error in add the comment");
+      });
   };
+
+  //! ----------------------------------get blog details------------------------------------------------
 
   const [blogDetails, setBlogDetails] = useState();
   const { id } = useParams();
@@ -54,6 +80,56 @@ export const Blog = () => {
         console.error(error);
       });
   }, [id]);
+  //! ---------------------------------get blog comments -----------------------------------------------
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    if (blogDetails && blogDetails._id) {
+      axios
+        .get(`http://localhost:8800/getComments/${blogDetails._id}`)
+        .then((response) => {
+          setComments(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [blogDetails, refresh]);
+  console.log(comments);
+
+  // Function to format time difference as "X time ago"
+  const formatTimeAgo = (createdAt) => {
+    const currentTime = new Date();
+    const commentTime = new Date(createdAt);
+    const timeDiff = currentTime.getTime() - commentTime.getTime();
+
+    const minute = 60 * 1000;
+    const hour = 60 * minute;
+    const day = 24 * hour;
+    const month = 30 * day;
+    const year = 365 * day;
+
+    if (timeDiff < minute) {
+      const seconds = Math.round(timeDiff / 1000);
+      return `${seconds} second${seconds !== 1 ? "s" : ""} ago`;
+    } else if (timeDiff < hour) {
+      const minutes = Math.round(timeDiff / minute);
+      return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+    } else if (timeDiff < day) {
+      const hours = Math.round(timeDiff / hour);
+      return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+    } else if (timeDiff < month) {
+      const days = Math.round(timeDiff / day);
+      return `${days} day${days !== 1 ? "s" : ""} ago`;
+    } else if (timeDiff < year) {
+      const months = Math.round(timeDiff / month);
+      return `${months} month${months !== 1 ? "s" : ""} ago`;
+    } else {
+      const years = Math.round(timeDiff / year);
+      return `${years} year${years !== 1 ? "s" : ""} ago`;
+    }
+  };
 
   return (
     <>
@@ -86,7 +162,8 @@ export const Blog = () => {
                           dateTime="2022-02-08"
                           title="February 8th, 2022"
                         >
-                          Feb. 8, 2022
+                          {formatTimeAgo(blogDetails.createdAt)}
+                          {/* {new Date(blogDetails.createdAt).toLocaleString()} */}
                         </time>
                       </p>
                     </div>
@@ -101,10 +178,10 @@ export const Blog = () => {
               <section className="not-format">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-lg lg:text-2xl font-bold text-white dark:text-white">
-                    Discussion (20)
+                    Discussion ({comments.length})
                   </h2>
                 </div>
-                <form className="mb-6" onSubmit={handleSubmit}>
+                <form className="mb-6" onSubmit={handleSubmitAddComment}>
                   <div className="py-2 px-4 mb-4 bg-gray-200 rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <label htmlFor="comment" className="sr-only">
                       Your comment
@@ -126,87 +203,96 @@ export const Blog = () => {
                     Post comment
                   </button>
                 </form>
-                <article className="p-6 mb-6 text-base bg-[#173d73] rounded-lg dark:bg-gray-900">
-                  <footer className="flex justify-between items-center mb-2">
-                    <div className="flex items-center">
-                      <p className="inline-flex items-center mr-3 text-sm text-white dark:text-white">
-                        <img
-                          className="mr-2 w-6 h-6 rounded-full"
-                          src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                          alt="Michael Gough"
-                        />
-                        Michael Gough
-                      </p>
-                      <p className="text-sm text-gray-400 dark:text-gray-400">
-                        <time
-                          pubdate=""
-                          dateTime="2022-02-08"
-                          title="February 8th, 2022"
-                        >
-                          Feb. 8, 2022
-                        </time>
-                      </p>
-                    </div>
-                    <button
-                      id="dropdownComment1Button"
-                      data-dropdown-toggle="dropdownComment1"
-                      className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-[#173d73] rounded-lg hover:bg-[#072958] focus:ring-4 focus:outline-none focus:bg-[#072958] dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                      type="button"
+                {comments &&
+                  comments.map((comment) => (
+                    <article
+                      key={comment._id}
+                      className="p-6 mb-6 text-base bg-[#173d73] rounded-lg dark:bg-gray-900"
                     >
-                      <svg
-                        className="w-5 h-5"
-                        aria-hidden="true"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                      </svg>
-                      <span className="sr-only">Comment settings</span>
-                    </button>
-                    {/* Dropdown menu */}
-                    <div
-                      id="dropdownComment1"
-                      className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                    >
-                      <ul
-                        className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                        aria-labelledby="dropdownMenuIconHorizontalButton"
-                      >
-                        <li>
-                          <a
-                            href="#"
-                            className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Edit
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Remove
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Report
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </footer>
-                  <p className="text-gray-400">
-                    Very straight-to-point article. Really worth time reading.
-                    Thank you! But tools are just the instruments for the UX
-                    designers. The knowledge of the design tools are as
-                    important as the creation of the design strategy.
-                  </p>
-                </article>
+                      <footer className="flex justify-between items-center mb-2">
+                        <div className="flex items-center">
+                          <p className="inline-flex items-center mr-3 text-sm text-white dark:text-white">
+                            <img
+                              className="mr-2 w-6 h-6 rounded-full"
+                              src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                              alt="Michael Gough"
+                            />
+                            {comment.user.username}
+                          </p>
+                          <p className="text-sm text-gray-400 dark:text-gray-400">
+                            <time
+                              pubdate=""
+                              dateTime="2022-02-08"
+                              title="February 8th, 2022"
+                            >
+                              {formatTimeAgo(comment.createdAt)}
+                            </time>
+                          </p>
+                        </div>
+                        {comment.user._id == userId && (
+                          <div className="relative">
+                            <button
+                              onClick={() => {
+                                setShow(!show);
+                              }}
+                              id="dropdownComment1Button"
+                              data-dropdown-toggle="dropdownComment1"
+                              className=" inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-[#173d73] rounded-lg hover:bg-[#072958] focus:ring-4 focus:outline-none focus:bg-[#072958] dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                              type="button"
+                            >
+                              <svg
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                              </svg>
+                              <span className="sr-only">Comment settings</span>
+                            </button>
+                            {show && (
+                              <div
+                                id="dropdownComment1"
+                                className=" absolute right-0 z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                              >
+                                <ul
+                                  className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                                  aria-labelledby="dropdownMenuIconHorizontalButton"
+                                >
+                                  <li>
+                                    <a
+                                      href="#"
+                                      className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    >
+                                      Edit
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    >
+                                      Remove
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    >
+                                      Report
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </footer>
+                      <p className="text-gray-400">{comment.text}</p>
+                    </article>
+                  ))}
               </section>
             </article>
           )}

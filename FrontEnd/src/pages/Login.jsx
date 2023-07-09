@@ -42,7 +42,7 @@ export const Login = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          navigate("/blog");
+          navigate("/blogs");
         }, 1000);
       } else {
         handleError(message);

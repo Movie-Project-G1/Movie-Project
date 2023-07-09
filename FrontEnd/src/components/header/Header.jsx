@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { HiOutlineSearch } from "react-icons/hi";
 import { SlMenu } from "react-icons/sl";
 import { VscChromeClose } from "react-icons/vsc";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import Avatar from "../../assets/avatar.png";
 
 import "./style.scss";
+// import "./header.css";
 
 import ContentWrapper from "../contentWrapper/ContentWrapper";
-import logo from "../../assets/z-movie-logo.png";
+import logo from "../../assets/moviehub-logo-.png";
+import { useCookies } from "react-cookie";
 
 const Header = () => {
   const [show, setShow] = useState("top");
@@ -17,6 +20,7 @@ const Header = () => {
   const [showSearch, setShowSearch] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const [cookies, removeCookie] = useCookies([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -67,7 +71,7 @@ const Header = () => {
     } else if (type === "tv") {
       navigate("/explore/tv");
     } else {
-      navigate("/blog");
+      navigate("/blogs");
     }
     setMobileMenu(false);
   };
@@ -77,7 +81,6 @@ const Header = () => {
       <ContentWrapper>
         <div className="logo" onClick={() => navigate("/")}>
           <img src={logo} alt="" />
-          <span>Z-Movie</span>
         </div>
         <ul className="menuItems">
           <li className="menuItem" onClick={() => navigationHandler("movie")}>
@@ -88,9 +91,29 @@ const Header = () => {
             TV Shows
           </li>
 
-          <li className="menuItem" onClick={() => navigationHandler("blog")}>
+          <li className="menuItem" onClick={() => navigationHandler("blogs")}>
             Blog
           </li>
+
+          <div className="dropdown">
+            <button className="dropbtn">
+              <img src={Avatar} alt="" />
+              <i class="fa fa-caret-down" />
+            </button>
+            <div className="dropdown-content">
+              <Link to="/profile">
+                <li>Profile</li>
+              </Link>
+              <button
+                onClick={() => {
+                  removeCookie("token");
+                  navigate("/signup");
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
 
           <li className="menuItem">
             <HiOutlineSearch onClick={openSearch} />
