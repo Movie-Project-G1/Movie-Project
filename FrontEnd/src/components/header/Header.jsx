@@ -9,7 +9,7 @@ import "./style.scss";
 // import "./header.css";
 
 import ContentWrapper from "../contentWrapper/ContentWrapper";
-import logo from "../../assets/z-movie-logo.png";
+import logo from "../../assets/moviehub-logo-.png";
 import { useCookies } from "react-cookie";
 
 const Header = () => {
@@ -81,7 +81,6 @@ const Header = () => {
       <ContentWrapper>
         <div className="logo" onClick={() => navigate("/")}>
           <img src={logo} alt="" />
-          <span>Z-Movie</span>
         </div>
         <ul className="menuItems">
           <li className="menuItem" onClick={() => navigationHandler("movie")}>
