@@ -232,7 +232,9 @@ export const Blog = () => {
                         {comment.user._id == userId && (
                           <div className="relative">
                             <button
-                              onClick={()=>{setShow(!show)}}
+                              onClick={() => {
+                                setShow(!show);
+                              }}
                               id="dropdownComment1Button"
                               data-dropdown-toggle="dropdownComment1"
                               className=" inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-[#173d73] rounded-lg hover:bg-[#072958] focus:ring-4 focus:outline-none focus:bg-[#072958] dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
