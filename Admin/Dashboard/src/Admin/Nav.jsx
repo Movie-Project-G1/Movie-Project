@@ -1,11 +1,6 @@
-
-
-
-
 export const Nav = () => {
- 
   return (
-    <nav className="bg-[#191a3e] border-b border-gray-200 px-4 py-3 fixed left-0 right-0 top-0 z-50 shadow-md">
+    <nav className="bg-[#fff] border-b border-gray-200 px-4 py-3 fixed left-0 right-0 top-0 z-50 shadow-md">
       <div className="flex flex-wrap  justify-between items-center">
         <div className="flex  justify-start items-center">
           <button
@@ -42,27 +37,10 @@ export const Nav = () => {
             </svg>
             <span className="sr-only">Toggle sidebar</span>
           </button>
-          {/* <Dropdown>
-      <Dropdown.Item>
-        Dashboard
-      </Dropdown.Item>
-      <Dropdown.Item>
-        Settings
-      </Dropdown.Item>
-      <Dropdown.Item>
-        Earnings
-      </Dropdown.Item>
-      <Dropdown.Item>
-        Sign out
-      </Dropdown.Item>
-    </Dropdown> */}
-          <a
-            href="#logo"
-            className="flex items-center justify-between mr-4"
-          >
-           
-            <span className="flex items-center  justify-center  w-24 h-10  text-2xl font-semibold whitespace-nowrap text-white">
-              Kitabk
+
+          <a href="#logo" className="flex items-center justify-between mr-4">
+            <span className="flex items-center ml-4  justify-center  w-24 h-10  text-2xl font-semibold whitespace-nowrap text-[#222]">
+              MovieHub
             </span>
           </a>
         </div>

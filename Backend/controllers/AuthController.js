@@ -56,10 +56,12 @@ module.exports.Login = async (req, res, next) => {
 
 module.exports.updateUser = async (req, res) => {
   try {
+
     const {id} = req.params
     const username = req.body.name;
     const imagePath = req.file.path;
     const user = await User.findById(id)
+
 
     if (!user) {
       console.log("User not found");
@@ -72,12 +74,37 @@ module.exports.updateUser = async (req, res) => {
   } catch (error) {
     console.error("Error editing user:", error);
   }
-},
+
+};
+
+module.exports.deleteUser = async (req, res) => {
+  console.log('delete cont')
+  try {
+    const userID = req.params.id;
+    console.log(userID);
+    const update = await User.findOneAndUpdate(
+      { _id: userID },
+      {
+        isDeleted: true,
+      }
+    );
+
+    if (update) {
+      const allUsers = await User.find({ isDeleted: false });
+      res.status(201).json(allUsers);
+      console.log(allUsers);
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update quote" });
+    console.log(error.message);
+  }
+};
 
 
 module.exports.getAllUsers = async (req, res) => {
   try {
-    const allUsers = await User.find({});
+    const allUsers = await User.find({ isDeleted: false });
+    console.log('delete cont')
 
     res.status(201).json(allUsers);
   } catch (err) {
@@ -88,6 +115,7 @@ module.exports.getAllUsers = async (req, res) => {
 module.exports.getUser = async (req, res) => {
   try {
     const userID = req.params.id;
+    // console.log('delete cont')
 
     const user = await User.findOne({ _id: userID });
 
