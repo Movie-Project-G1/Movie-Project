@@ -8,6 +8,7 @@ import "./style.scss";
 
 import ContentWrapper from "../contentWrapper/ContentWrapper";
 import logo from "../../assets/z-movie-logo.png";
+import { useCookies } from "react-cookie";
 
 const Header = () => {
   const [show, setShow] = useState("top");
@@ -17,6 +18,7 @@ const Header = () => {
   const [showSearch, setShowSearch] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const [cookies, removeCookie] = useCookies([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -94,6 +96,16 @@ const Header = () => {
 
           <li className="menuItem">
             <HiOutlineSearch onClick={openSearch} />
+          </li>
+          <li className="menuItem">
+            <button
+              onClick={() => {
+                removeCookie("token");
+                navigate("/signup");
+              }}
+            >
+              LogOut
+            </button>
           </li>
         </ul>
 

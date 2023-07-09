@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const BlogsList = () => {
   const [blogs, setBlogs] = useState([]);
-
+  
   useEffect(() => {
     axios
       .get('http://localhost:8800/getAllBlogs')
