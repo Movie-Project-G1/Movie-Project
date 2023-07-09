@@ -30,8 +30,12 @@ const getBlog = async (req, res) => {
 
 const addBlog = async (req, res) => {
   try {
-    const { author, title, content } = req.body;
-    const blog = await Blog.create({ author, title, content });
+    const { title, content } = req.body;
+    const {id} = req.params
+    console.log(content);
+    console.log(title);
+    console.log(req.body);
+    const blog = await Blog.create({ author:id, title, content });
     res
       .status(201)
       .json({ message: "blog added success", success: true, blog });
