@@ -3,7 +3,18 @@ const User = require("../models/userModel");
 
 const getAllBlogs = async (req, res) => {
   try {
-    const allBlog = await Blog.find({ isDeleted: false }).sort({
+    const allBlog = await Blog.find({ isDeleted: false , isApproved : true }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(allBlog);
+  } catch (error) {
+    console.error("err getting the all blog", error);
+  }
+};
+const getAllBlogsRequests = async (req, res) => {
+  try {
+    const allBlog = await Blog.find({ isDeleted: false , isApproved : false }).sort({
       createdAt: -1,
     });
 
@@ -41,23 +52,25 @@ const addBlog = async (req, res) => {
 };
 
 const deleteBlog = async (req, res) => {
+  // console.log('delete cont')
   try {
-    const { userId, idBlog } = req.body;
-    const blog = await Blog.findById(idBlog).populate("author");
-    // const user = blog.author
-    // if (blog.author._id !== userId) {
-    //   return res.status(500).json({ error: "this is not your blog to delete" });
-    // }
+    const blogID = req.params.id;
+    console.log(blogID);
+    const update = await Blog.findOneAndUpdate(
+      { _id: blogID },
+      {
+        isDeleted: true,
+      }
+    );
 
-    blog.isDeleted = true;
-    blog.save();
-
-    res.status(200).json({
-      success: `blog is deleted successfully`,
-    });
+    if (update) {
+      const allUsers = await Blog.find({ isDeleted: false , isApproved : false  });
+      res.status(201).json(allUsers);
+      console.log(allUsers);
+    }
   } catch (error) {
-    console.error("error in delete the blog", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Failed to update quote" });
+    console.log(error.message);
   }
 };
 
@@ -92,4 +105,28 @@ const updateBlog = async (req, res) => {
   }
 };
 
-module.exports = { getAllBlogs, deleteBlog, addBlog, updateBlog, getBlog };
+
+const blogRequest =  async (req, res) => {
+
+  try {
+    const blogID = req.params.id;
+    console.log(blogID);
+    const update = await Blog.findOneAndUpdate(
+      { _id: blogID },
+      {
+        isApproved : true,
+      }
+    );
+
+    if (update) {
+      const allUsers = await Blog.find({ isDeleted: false , isApproved : false  });
+      res.status(201).json(allUsers);
+      console.log(allUsers);
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update quote" });
+    console.log(error.message);
+  }
+};
+
+module.exports = { getAllBlogs, getAllBlogsRequests , deleteBlog, addBlog, updateBlog, getBlog  , blogRequest};

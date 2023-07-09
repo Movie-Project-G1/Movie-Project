@@ -65,16 +65,40 @@ module.exports.updateUser = async (req, res) => {
         username: name,
       }
     );
+    console.log('delete cont')
 
     res.status(201).json("user updated successfully ");
   } catch (error) {
     res.status(500).json({ error: "Failed to update quote" });
   }
 };
+module.exports.deleteUser = async (req, res) => {
+  console.log('delete cont')
+  try {
+    const userID = req.params.id;
+    console.log(userID);
+    const update = await User.findOneAndUpdate(
+      { _id: userID },
+      {
+        isDeleted: true,
+      }
+    );
+
+    if (update) {
+      const allUsers = await User.find({ isDeleted: false });
+      res.status(201).json(allUsers);
+      console.log(allUsers);
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update quote" });
+    console.log(error.message);
+  }
+};
 
 module.exports.getAllUsers = async (req, res) => {
   try {
-    const allUsers = await User.find({});
+    const allUsers = await User.find({ isDeleted: false });
+    console.log('delete cont')
 
     res.status(201).json(allUsers);
   } catch (err) {
@@ -85,6 +109,7 @@ module.exports.getAllUsers = async (req, res) => {
 module.exports.getUser = async (req, res) => {
   try {
     const userID = req.params.id;
+    // console.log('delete cont')
 
     const user = await User.findOne({ _id: userID });
 

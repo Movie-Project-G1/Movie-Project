@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Your password is required"],
   },
+  isDeleted:{
+    type: Boolean,
+    default:false
+  },
   createdAt: {
     type: Date,
     default: new Date(),
