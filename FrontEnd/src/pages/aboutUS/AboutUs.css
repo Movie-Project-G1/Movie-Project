@@ -32,11 +32,13 @@
     display: block;
     margin: 0 auto;
     background-color: rgb(156, 14, 14);
+
 }
 
 .heading_about p {
     font-size: 18px;
     margin-bottom: 35px;
+    color: white;
 }
 
 .container_about {

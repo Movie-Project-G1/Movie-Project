@@ -3,8 +3,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url(../../assets/Background-Narrow.jpg);
+    background-image: url(https://images.pexels.com/photos/5826828/pexels-photo-5826828.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
     background-size: cover;
+    flex-direction: column;
 }
 
 .profile__card {
@@ -82,4 +83,12 @@
     z-index: 1000;
     font-weight: 600;
     font-size: 16px;
+}
+
+.blogs_profile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
 }
