@@ -30,7 +30,7 @@ const Header = () => {
   useEffect(() => {
     const verifyCookie = async () => {
       if (!cookies.token) {
-        navigate("/login");
+        navigate("/signup");
       }
       const { data } = await axios.post(
         "http://localhost:8800",
@@ -41,11 +41,7 @@ const Header = () => {
       const { status, user, id } = data;
       setUser(user);
       setUserId(id);
-      return status
-        ? toast(`Hello ${user}`, {
-            position: "top-right",
-          })
-        : (removeCookie("token"));
+      return status ? "" : removeCookie("token");
     };
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
