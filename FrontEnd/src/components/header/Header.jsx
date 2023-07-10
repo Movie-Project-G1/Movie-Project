@@ -5,8 +5,11 @@ import { VscChromeClose } from "react-icons/vsc";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Avatar from "../../assets/avatar.png";
 
+import axios from "axios";
 import "./style.scss";
 // import "./header.css";
+
+import { toast } from "react-toastify";
 
 import ContentWrapper from "../contentWrapper/ContentWrapper";
 import logo from "../../assets/moviehub-logo-.png";
@@ -21,6 +24,31 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [cookies, removeCookie] = useCookies([]);
+  const [userId, setUserId] = useState("");
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    const verifyCookie = async () => {
+      if (!cookies.token) {
+        navigate("/login");
+      }
+      const { data } = await axios.post(
+        "http://localhost:8800",
+        {},
+        { withCredentials: true }
+      );
+      console.log(data);
+      const { status, user, id } = data;
+      setUser(user);
+      setUserId(id);
+      return status
+        ? toast(`Hello ${user}`, {
+            position: "top-right",
+          })
+        : (removeCookie("token"));
+    };
+    verifyCookie();
+  }, [cookies, navigate, removeCookie]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -94,30 +122,45 @@ const Header = () => {
           <li className="menuItem" onClick={() => navigationHandler("blogs")}>
             Blog
           </li>
-
-          <div className="dropdown">
-            <button className="dropbtn">
-              <img src={Avatar} alt="" />
-              <i class="fa fa-caret-down" />
-            </button>
-            <div className="dropdown-content">
-              <Link to="/profile">
-                <li>Profile</li>
-              </Link>
-              <button
-                onClick={() => {
-                  removeCookie("token");
-                  navigate("/signup");
-                }}
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-
           <li className="menuItem">
             <HiOutlineSearch onClick={openSearch} />
           </li>
+
+          {user ? (
+            <>
+              <div className="dropdown">
+                <button className="dropbtn">
+                  <img src={Avatar} alt="" />
+                  <i class="fa fa-caret-down" />
+                </button>
+                <div className="dropdown-content">
+                  <Link to="/profile">
+                    <li>Profile</li>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      removeCookie("token");
+                      navigate("/signup");
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <li className="menuItem">
+                <button
+                  onClick={() => {
+                    navigate("/signup");
+                  }}
+                >
+                  Join us
+                </button>
+              </li>
+            </>
+          )}
         </ul>
 
         <div className="mobileMenuItems">

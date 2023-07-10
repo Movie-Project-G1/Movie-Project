@@ -3,15 +3,9 @@ const User = require('../models/userModel');
 
 const deleteComment = async (req, res) => {
   try {
-    const { userId, idComment } = req.params;
-    console.log(idComment);
-    const comment = await Comment.findById(idComment);
-
-    if (comment.user !== userId) {
-      return res
-        .status(500)
-        .json({ error: 'this is not your comment to delete' });
-    }
+    const { id } = req.params;
+    console.log(id);
+    const comment = await Comment.findById(id);
 
     comment.isDeleted = true;
     comment.save();
@@ -40,8 +34,7 @@ const addComment = async (req, res) => {
 const getComments =async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("this is the id :" ,id);
-    const comments = await Comment.find({blog:id}).populate("user").lean()
+    const comments = await Comment.find({blog:id, isDeleted: false}).populate("user").lean()
     res.status(200).json(comments);
   } catch (error) {
     res.status(500).json({ error: "error in get blog comments " });
